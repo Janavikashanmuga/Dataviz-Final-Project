@@ -7,7 +7,6 @@ import numpy as np
 # Page Configuration
 st.set_page_config(
     page_title="Global Coffee Quality Dashboard",
-    page_icon="☕",
     layout="wide"
 )
 
@@ -25,7 +24,7 @@ def load_data():
 df = load_data()
 
 # 2. Application Header
-st.title("☕ The Global Coffee Footprint")
+st.title("The Global Coffee Footprint")
 st.markdown("### *An Interactive Exploration of Sensory Quality, Processing, and Geography*")
 st.markdown("---")
 
@@ -54,19 +53,15 @@ filtered_df = df[
     (df['Processing Method'].isin(selected_methods))
 ]
 
-# Quick metrics on top
 col1, col2, col3 = st.columns(3)
-with col1:
-    st.metric("Total Samples Selected", len(filtered_df))
-with col2:
-    st.metric("Avg Quality Score", f"{filtered_df['Total Cup Points'].mean():.2f} / 100")
-with col3:
-    st.metric("Highest Elevation", f"{filtered_df['Altitude'].max():.0f} m")
+col1.metric("Total Samples Selected", len(filtered_df))
+col2.metric("Avg Quality Score", f"{filtered_df['Total Cup Points'].mean():.2f}")
+col3.metric("Highest Elevation", f"{filtered_df['Altitude'].max():.0f} m")
 
 st.markdown("---")
 
 # 4. Multi-Tab Layout (Extra Credit Design!)
-tab1, tab2, tab3 = st.tabs(["🌍 Geography & Altitude", "👃 Sensory Chemistry", "⚠️ Defect Analysis"])
+tab1, tab2, tab3 = st.tabs(["Geography & Altitude", "Sensory Chemistry", "Defect Analysis"])
 
 # --- TAB 1: GEOGRAPHY & ALTITUDE ---
 with tab1:
@@ -75,7 +70,7 @@ with tab1:
     col_left, col_right = st.columns(2)
     
     with col_left:
-        # Visual 1: Altitude vs. Quality Scatter (Question 1) - Warning Free
+        # Visual 1: Altitude vs. Quality Scatter
         plot_df = filtered_df.copy()
         highest_score = plot_df['Total Cup Points'].max() if len(plot_df) > 0 else 0
         plot_df['Highlight'] = np.where(plot_df['Total Cup Points'] == highest_score, 'Highest Quality', 'Other Coffees')
@@ -85,10 +80,10 @@ with tab1:
             x='Altitude',
             y='Total Cup Points',
             color='Highlight',
-            color_discrete_map={'Other Coffees': '#b0b0b0', 'Highest Quality': '#D4AF37'},
+            color_discrete_map={'Other Coffees': '#455dbb', 'Highest Quality': '#D4AF37'},
             opacity=0.8,
             trendline="ols" if len(plot_df) > 2 else None,
-            trendline_color_override="#555555",
+            trendline_color_override="#D32424",
             hover_data=['Country of Origin', 'Variety'],
             labels={'Altitude': 'Altitude (m)', 'Total Cup Points': 'Cup Score'}
         )
@@ -100,13 +95,13 @@ with tab1:
         st.plotly_chart(fig1, use_container_width=True)
 
     with col_right:
-        # Visual 2: Altitude Spread by Country (Question 11)
+        # Visual 2: Altitude Spread by Country
         fig11 = px.box(
             filtered_df,
             x='Country of Origin',
             y='Altitude',
             color='Country of Origin',
-            color_discrete_sequence=['#8c6239', '#a67c52', '#c49a6c', '#d9b48f', '#b0b0b0'],
+            color_discrete_sequence=['#643b12', '#3a2815', '#c49a6c', '#d9b48f', '#620f0f'],
             points="outliers",
             labels={'Altitude': 'Altitude (m)'}
         )
@@ -124,14 +119,16 @@ with tab2:
     col_left, col_right = st.columns(2)
     
     with col_left:
-        # Visual 3: Acidity vs. Body Trade-off (Question 7)
+        # Visual 3: Acidity vs. Body Trade-off
+# Updated block with trendline="ols" included
         fig7 = px.scatter(
             filtered_df,
             x='Acidity',
             y='Body',
             color='Processing Method',
-            color_discrete_map={'Washed / Wet': '#c49a6c', 'Natural / Dry': '#8c6239'},
+            color_discrete_map={'Washed / Wet': '#eb7c06', 'Natural / Dry': '#694828'},
             opacity=0.7,
+            trendline="ols",
             labels={'Acidity': 'Acidity Score', 'Body': 'Body Score'}
         )
         fig7.update_layout(
@@ -141,8 +138,8 @@ with tab2:
         st.plotly_chart(fig7, use_container_width=True)
         
     with col_right:
-        # Visual 4: Predictors of Overall Quality (Question 8)
-        sensory_cols = ['Aroma', 'Flavor', 'Acidity', 'Body', 'Balance', 'Sweetness']
+        # Visual 4: Predictors of Overall Quality
+        sensory_cols = ['Aroma', 'Flavor', 'Acidity', 'Body', 'Balance']
         if len(filtered_df) > 1:
             correlations = filtered_df[sensory_cols].corrwith(filtered_df['Total Cup Points']).reset_index()
             correlations.columns = ['Sensory Attribute', 'Correlation']
@@ -178,7 +175,7 @@ with tab3:
     col_left, col_right = st.columns(2)
     
     with col_left:
-        # Visual 5: Regional Defect Profiles (Question 2) - Guaranteed Data Coverage
+        # Visual 5: Regional Defect Profiles
         def classify_region(country):
             african = ['Ethiopia', 'Kenya', 'Uganda', 'Tanzania', 'Rwanda', 'Burundi']
             central_am = ['Guatemala', 'Honduras', 'Nicaragua', 'Costa Rica', 'El Salvador', 'Panama']
@@ -210,7 +207,7 @@ with tab3:
                 y='Average Defects',
                 color='Region',
                 barmode='group',
-                color_discrete_map={'East Africa': '#8c6239', 'Central America': '#c49a6c'},
+                color_discrete_map={'East Africa': '#6f3c0a', 'Central America': '#c29667'},
                 labels={'Average Defects': 'Average Defects per Batch (350g)'}
             )
             fig2.update_layout(
@@ -223,7 +220,7 @@ with tab3:
             st.info("ℹ️ Select at least one East African (e.g., Ethiopia) or Central American country (e.g., Guatemala) to compare regional defect profiles!")
             
     with col_right:
-        # Visual 6: Processing methods in elite tier (Question 10)
+        # Visual 6: Processing methods in elite tier
         score_thresh = filtered_df['Total Cup Points'].quantile(0.80) if len(filtered_df) > 5 else 0
         df_elite = filtered_df[filtered_df['Total Cup Points'] >= score_thresh].copy()
         
@@ -237,7 +234,7 @@ with tab3:
                 x='Percentage',
                 y='Processing Method',
                 orientation='h',
-                color_discrete_sequence=['#8c6239'],
+                color_discrete_map={'Other Methods': "#e8cfbc", 'Dominant Method': '#8c6239'},
                 labels={'Percentage': 'Proportion of Top 20% Coffees (%)'}
             )
             fig10.update_layout(
