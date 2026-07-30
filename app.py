@@ -96,6 +96,7 @@ with tab1:
 
     with col_right:
         # Visual 2: Altitude Spread by Country
+# Visual 2: Altitude Spread by Country
         fig11 = px.box(
             filtered_df,
             x='Country of Origin',
@@ -113,8 +114,9 @@ with tab1:
         st.plotly_chart(fig11, use_container_width=True)
 
 # --- TAB 2: SENSORY CHEMISTRY ---
+# --- TAB 2: SENSORY CHEMISTRY ---
 with tab2:
-    st.subheader("Sensory Profile Deep-Dive")
+    st.subheader(f"Sensory Profile Deep-Dive for {len(selected_countries)} Selected Regions")
     
     col_left, col_right = st.columns(2)
     
@@ -136,12 +138,20 @@ with tab2:
             plot_bgcolor="white"
         )
         st.plotly_chart(fig7, use_container_width=True)
-        
+
+        with st.expander("Methodology & OLS Details"):
+            st.write("Ordinary Least Squares (OLS) regression isolates the linear trend between acidity and body. By segmenting this trendline across processing methods, we can observe how post-harvest techniques actively shift the chemical baseline of the beans.")
+
+
     with col_right:
         # Visual 4: Predictors of Overall Quality
         sensory_cols = ['Aroma', 'Flavor', 'Acidity', 'Body', 'Balance']
-        if len(filtered_df) > 1:
-            correlations = filtered_df[sensory_cols].corrwith(filtered_df['Total Cup Points']).reset_index()
+        
+        # Drop missing values to prevent math errors on sparse filters
+        valid_corr_df = filtered_df[sensory_cols + ['Total Cup Points']].dropna()
+        
+        if len(valid_corr_df) > 1:
+            correlations = valid_corr_df[sensory_cols].corrwith(valid_corr_df['Total Cup Points']).reset_index()
             correlations.columns = ['Sensory Attribute', 'Correlation']
             correlations = correlations.sort_values(by='Correlation', ascending=True)
             

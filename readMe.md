@@ -1,38 +1,45 @@
-**The Global Coffee Footprint Dashboard**
-This project is an interactive, web-based dashboard built with Streamlit to explore the quality, processing methods, and geographical origins of specialty Arabica coffee. It transforms a complex dataset into actionable insights for coffee enthusiasts and industry professionals.
+#  The Global Coffee Footprint Dashboard
+### *An Interactive Exploration of Sensory Quality, Processing, and Geography*
 
-**Key Features**
-Interactive Filtering: Dynamically explore coffee data by continent, country, and processing method.
+---
 
-**Visual Analytics**
-Utilizes Plotly to display scatter plots with trendline analysis, comparative bar charts, and sensory distribution graphs.
+##  Project Overview
+This project is an interactive, web-based dashboard built with Streamlit to explore the quality, processing methods, and geographical origins of specialty Arabica coffee. Moving beyond basic one-dimensional data summaries, this advanced exploratory data analysis investigates the underlying structural drivers, environmental conditions, and processing trade-offs that determine premium cup quality. 
 
-**Key Performance Indicators**
-Automated summary cards showcasing average quality scores, sample sizes, and elevation data.
+##  Key Features
+*   **Interactive Filtering:** Dynamically filter and explore coffee data by selecting specific countries of origin and processing methods.
+*   **Geography & Altitude Analytics:** Visualizes how topographic features and cultivation altitude correlate with core sensory profiles and yield the highest-scoring beans.
+*   **Sensory Chemistry Deep-Dive:** Uses Ordinary Least Squares (OLS) regression to examine the chemical trade-offs between acidity and body, isolating the strongest sensory predictors of overall cup score
 
-**Technology Stack**
-Language: Python
+*   **Physical Defect Analysis:** Quantifies the relationship between raw material imperfections—specifically Primary (Category 1) and Secondary (Category 2) defects—across different regional profiles.
+*   **Automated KPIs:** Instantly view summary metric cards displaying the total samples selected, average quality score, and highest elevation based on your active filters.
 
-Data Processing: Pandas
+## 🛠 Technology Stack
+*   **Language:** Python
+*   **Data Processing:** Pandas, NumPy
+*   **Data Visualization:** Plotly (Plotly Express & Graph Objects)
+*   **Web Framework:** Streamlit
 
-Data Visualization: Plotly
+##  Getting Started
+To run this data visualization project locally, follow these steps:
 
-Web Framework: Streamlit
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/Janavikashanmuga/Dataviz-Final-Project](https://github.com/Janavikashanmuga/Dataviz-Final-Project)
 
-**Getting Started**
-To run this project locally, follow these steps:
+2. **Install the required dependencies:**
+   ```bash
+   pip install -r requirements.txt
+  
 
-**Clone the repository**
-git clone https://github.com/Janavikashanmuga/Dataviz-Final-Project
+3. **Launch the application:**
+   ```bash
+   streamlit run app.py
 
-**Install the required dependencies**
-pip install -r requirements.txt
 
-**Run the application**
-streamlit run app.py
+## Deployment
+The dashboard is hosted and live on Streamlit Community Cloud, ensuring seamless accessibility for stakeholders and easy portfolio review. 
 
-**Deployment**
-The project is hosted and live on Streamlit Community Cloud, ensuring easy accessibility for stakeholders and portfolio review.
-
-**Author**
-Janavika Shanmuga
+---
+**Author:** Janavika Shanmuga
+*M.Sc. Data Science, University of Europe for Applied Sciences*
